@@ -33,3 +33,37 @@ sparql_query <- 'SELECT DISTINCT ?comp ?compLabel ?bp ?bpUnitLabel ?SMILE WHERE 
 }'
 results = query_wikidata(sparql_query)
 ```
+
+#data preprocessing and control, remove brackets from smile string for data control
+#store SMILES for later use
+```{r}
+results_SMILES <- results[,5]
+pattern<- "\\("
+replacement <- ""
+results[,5] <- gsub(pattern, replacement, results[,5])
+pattern<- "\\)"
+results[,5] <- gsub(pattern, replacement, results[,5])
+plot(results[order(nchar(results[,5])),3], xlab="alkane length", ylab="bp")
+```
+#it looks from the plot that the units are not all equal
+#changing all of the units kelvin(T(C)+273.15, T(°F) + 459.67) × 5/9)
+```{r}
+for(i in 1:nrow(results)){
+  if (results[i,4] == "degree Celsius"){
+  results[i,3] <- results[i,3]+273.15
+  results[i,4] <- "kelvin"
+}
+}
+for(i in 1:nrow(results)){
+  if (results[i,4] == "degree Fahrenheit"){
+  results[i,3] <- ((results[i,3]+ 459.67)*5/9)
+  results[i,4] <- "kelvin"
+}
+}
+```
+#data  control after changing temperatures to celsius
+```{r}
+plot(results[order(nchar(results[,5])),3], xlab="alkane length", ylab="bp")
+
+```
+#pls for bp prediction on alkanes
