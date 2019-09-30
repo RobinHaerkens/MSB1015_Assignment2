@@ -1,0 +1,35 @@
+---
+title: "MSB1015_Assignment_2"
+output: html_document
+---
+#loading in all the required packages
+#Required packages are WikidataQueryServiceR to obtain the data from wikidata
+#rJAVA and rcdk are required to predict the pb based on the smiles
+#pls to predict bp aswel
+```{r setup, include=FALSE}
+if(!"RCy3" %in% installed.packages()){
+  install.packages("WikidataQueryServiceR")
+  install.packages("rJava")
+  install.packages ("rcdk") 
+  install.packages("pls")
+}
+  library(WikidataQueryServiceR)
+  library(rJava)
+  library(rcdk)
+  library(pls)
+```
+
+#loading in the data using SPARQL
+#requesting boiling point of all alkanes with units and SMILES data
+```{r}
+sparql_query <- 'SELECT DISTINCT ?comp ?compLabel ?bp ?bpUnitLabel ?SMILE WHERE {
+    ?comp wdt:P31/wdt:P279* wd:Q41581 ;
+  p:P2102 [
+    ps:P2102 ?bp ;
+    psv:P2102/wikibase:quantityUnit  ?bpUnit
+    ] ;
+  wdt:P233 ?SMILE .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+}'
+results = query_wikidata(sparql_query)
+```
