@@ -36,47 +36,51 @@ results = query_wikidata(sparql_query)
 
 #data preprocessing and control, remove brackets from smile string for data control
 ```{r}
+#get index of colnumbers to make SMILE and bp selection
+index_SMILES <- which(colnames(results)=="SMILE")
+index_bp <- which(colnames(results) =="bp")
+index_bpUnit <- which(colnames(results)=="bpUnitLabel")
 #save the actual SMILES for later use
-results_SMILES <- results[,5]
+results_SMILES <- results[,index_SMILES]
 #remove "(" and ")" to get a line of just C's
 pattern<- "\\("
 replacement <- ""
-results[,5] <- gsub(pattern, replacement, results[,5])
+results[,5] <- gsub(pattern, replacement, results[,index_SMILES])
 pattern<- "\\)"
-results[,5] <- gsub(pattern, replacement, results[,5])
+results[,5] <- gsub(pattern, replacement, results[,index_SMILES])
 #plot the amount of C's against bp to see releation and look for outlayers
-plot(results[order(nchar(results[,5])),3], xlab="alkane length", ylab="bp")
+plot(results[order(nchar(results[,index_SMILES])),index_bp], xlab="alkane length", ylab="bp")
 ```
 #it looks from the plot that the units are not all equal
 #changing all of the units kelvin(T(C)+273.15, T(°F) + 459.67) × 5/9)
 ```{r}
 #change Celsius to Kelvin
 for(i in 1:nrow(results)){
-  if (results[i,4] == "degree Celsius"){
-  results[i,3] <- results[i,3]+273.15
-  results[i,4] <- "kelvin"
+  if (results[i,index_bpUnit] == "degree Celsius"){
+  results[i,index_bp] <- results[i,index_bp]+273.15
+  results[i,index_bpUnit] <- "kelvin"
 }
 }
 #Change Fahrenheit to Kelvin
 for(i in 1:nrow(results)){
-  if (results[i,4] == "degree Fahrenheit"){
-  results[i,3] <- ((results[i,3]+ 459.67)*5/9)
-  results[i,4] <- "kelvin"
+  if (results[i,index_bpUnit] == "degree Fahrenheit"){
+  results[i,index_bp] <- ((results[i,index_bp]+ 459.67)*5/9)
+  results[i,index_bpUnit] <- "kelvin"
 }
 }
 ```
 #data  control after changing temperatures to celsius
 ```{r}
 #plot again with all units converted to kelvin
-plot(results[order(nchar(results[,5])),3], xlab="alkane length", ylab="bp")
+plot(results[order(nchar(results[,index_SMILES])),index_bp], xlab="alkane length", ylab="bp")
 
 ```
 #get all the molecular information from the rcdk package for the alkanes based on SMILES
 ```{r}
 #reassign the orignal SMILES to the results
-results[,5] <- results_SMILES
+results[,index_SMILES] <- results_SMILES
 #parse all the alkane smiles through the rcdk package to obtain all availlable information
-results.rcdk <- parse.smiles(results[,5])
+results.rcdk <- parse.smiles(results[,index_SMILES])
 
 #select descriptive categories
 dc <- get.desc.categories()
@@ -102,7 +106,7 @@ results.plsr <- results.plsr[ , -which(names(results.plsr) %in% c("VABC","geomSh
 smp_size <- floor(.80 * nrow(results.plsr))
 
 ## set the seed to get the same test and training sets when rerunning the code
-set.seed(1)
+set.seed(123)
 train_ind <- sample(seq_len(nrow(results.plsr)), size = smp_size)
 
 train <- results.plsr[train_ind, ]
@@ -117,9 +121,10 @@ bp.plsr <- plsr(bp ~. , data=train, validation = "LOO", ncomp=4)
 ```
 #testing the models accuracy on the test data set
 ```{r}
+#select column containing bp
 bp_index <- which(colnames(test) == "bp")
 Prediction <- RMSEP(bp.plsr, newdata=test)
 #compare predicted bp's to actual bp's and look at the RMSEP
 Prediction
-#RMSEP is 54.87 at time of running
+#RMSEP is 46.8 at time of running
 ```
