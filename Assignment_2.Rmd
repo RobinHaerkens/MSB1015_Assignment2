@@ -128,3 +128,10 @@ Prediction <- RMSEP(bp.plsr, newdata=test)
 Prediction
 #RMSEP is 46.8 at time of running
 ```
+#plotting predicted boiling ponts against actual boiling points
+```{r}
+#plot the predicted values against the measured values for the corss-validated values
+predplot(bp.plsr, main = "Predicted bp vs measured Bp of Cross-Validation")
+abline(a = 0, b = 1)
+#it seems that the model predicts most of the boiling points pretty well except for the lower boiling points
+```
