@@ -134,4 +134,7 @@ Prediction
 predplot(bp.plsr, main = "Predicted bp vs measured Bp of Cross-Validation")
 abline(a = 0, b = 1)
 #it seems that the model predicts most of the boiling points pretty well except for the lower boiling points
+#plotting the boiling points of the test set vs the predicted boiling points calculated by the pls model
+predplot(bp.plsr, newdata=test, main = "Predicted bp vs measured bp of Test data")
+abline(a = 0, b = 1)
 ```
