@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>MSB1015_Assignment_2</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Code</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">MSB1015_Assignment_2</h1>
+
+</div>
+
+
+<div id="loading-in-all-the-required-packages" class="section level1">
+<h1>Loading in all the required packages</h1>
+<pre class="r"><code>#Install packages if needed and load, or just load packages
+#Required packages are WikidataQueryServiceR to obtain the data from wikidata
+#rJAVA and rcdk are required to predict the pb based on the SMILES
+#pls to make prediction model for bp
+if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE))
+  install.packages(&quot;BiocManager&quot;, ask = F)
+
+# Insert all packages in requiredpackages
+requiredpackages &lt;-
+  c(&quot;WikidataQueryServiceR&quot;,&quot;rJava&quot;,&quot;rcdk&quot;,&quot;pls&quot;)
+for (i in requiredpackages) {
+    if (!requireNamespace(i, quietly = TRUE))
+        BiocManager::install(i, ask = F, dependencies = c(&quot;Depends&quot;, &quot;Imports&quot;))
+    require(as.character(i), character.only = TRUE)
+    print(i)
+}</code></pre>
+<pre><code>## [1] &quot;WikidataQueryServiceR&quot;
+## [1] &quot;rJava&quot;
+## [1] &quot;rcdk&quot;
+## [1] &quot;pls&quot;</code></pre>
+<pre class="r"><code>  library(WikidataQueryServiceR)
+  library(rJava)
+  library(rcdk)
+  library(pls)</code></pre>
+</div>
+<div id="loading-in-the-data-using-sparql" class="section level1">
+<h1>Loading in the data using SPARQL</h1>
+</div>
+<div id="requesting-boiling-point-of-all-alkanes-with-units-and-smiles-data" class="section level1">
+<h1>Requesting boiling point of all alkanes with units and SMILES data</h1>
+<pre class="r"><code>sparql_query &lt;- &#39;SELECT DISTINCT ?comp ?compLabel ?bp ?bpUnitLabel ?SMILE WHERE {
+    ?comp wdt:P31/wdt:P279* wd:Q41581 ;
+  p:P2102 [
+    ps:P2102 ?bp ;
+    psv:P2102/wikibase:quantityUnit  ?bpUnit
+    ] ;
+  wdt:P233 ?SMILE .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language &quot;[AUTO_LANGUAGE],en&quot;. }
+}&#39;
+results = query_wikidata(sparql_query)</code></pre>
+<pre><code>## 134 rows were returned by WDQS</code></pre>
+</div>
+<div id="data-preprocessing-and-control-remove-brackets-from-smiles-string-for-data-control" class="section level1">
+<h1>Data preprocessing and control, remove brackets from SMILES string for data control</h1>
+<pre class="r"><code>#get index of colnumbers to make SMILES and bp selection
+index_SMILES &lt;- which(colnames(results)==&quot;SMILE&quot;)
+index_bp &lt;- which(colnames(results) ==&quot;bp&quot;)
+index_bpUnit &lt;- which(colnames(results)==&quot;bpUnitLabel&quot;)
+
+#save the actual SMILES for later use
+results_SMILES &lt;- results[,index_SMILES]
+
+#remove &quot;(&quot; and &quot;)&quot; to get a line of just C&#39;s
+pattern&lt;- &quot;\\(&quot;
+replacement &lt;- &quot;&quot;
+results[,5] &lt;- gsub(pattern, replacement, results[,index_SMILES])
+pattern&lt;- &quot;\\)&quot;
+results[,5] &lt;- gsub(pattern, replacement, results[,index_SMILES])
+
+#plot the amount of C&#39;s against bp to see releation and look for outlayers
+plot(results[order(nchar(results[,index_SMILES])),index_bp], xlab=&quot;alkane length&quot;, ylab=&quot;bp&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>#it looks from the plot that the units are not all equal</code></pre>
+</div>
+<div id="changing-all-of-the-units-kelvintc273.15-tf-459.67-x-59" class="section level1">
+<h1>Changing all of the units kelvin(T(C)+273.15, T(F) + 459.67) x 5/9)</h1>
+<pre class="r"><code>#change Celsius to Kelvin
+for(i in 1:nrow(results)){
+  if (results[i,index_bpUnit] == &quot;degree Celsius&quot;){
+  results[i,index_bp] &lt;- results[i,index_bp]+273.15
+  results[i,index_bpUnit] &lt;- &quot;kelvin&quot;
+}
+}
+#Change Fahrenheit to Kelvin
+for(i in 1:nrow(results)){
+  if (results[i,index_bpUnit] == &quot;degree Fahrenheit&quot;){
+  results[i,index_bp] &lt;- ((results[i,index_bp]+ 459.67)*5/9)
+  results[i,index_bpUnit] &lt;- &quot;kelvin&quot;
+}
+}</code></pre>
+</div>
+<div id="data-control-after-changing-temperatures-to-celsius" class="section level1">
+<h1>Data control after changing temperatures to celsius</h1>
+<pre class="r"><code>#plot again with all units converted to kelvin
+plot(results[order(nchar(results[,index_SMILES])),index_bp], xlab=&quot;alkane length&quot;, ylab=&quot;bp&quot;)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="get-all-the-molecular-information-from-the-rcdk-package-for-the-alkanes-based-on-smiles" class="section level1">
+<h1>Get all the molecular information from the rcdk package for the alkanes based on SMILES</h1>
+<pre class="r"><code>#reassign the orignal SMILES to the results
+results[,index_SMILES] &lt;- results_SMILES
+
+#parse all the alkane smiles through the rcdk package to obtain all availlable information
+results.rcdk &lt;- parse.smiles(results[,index_SMILES])
+
+#select descriptive categories
+dc &lt;- get.desc.categories()
+
+#select names of discriptive topological caterogies)
+dn &lt;- get.desc.names(dc[3])
+
+allDescs &lt;- eval.desc(results.rcdk, dn)</code></pre>
+</div>
+<div id="creating-data-object-to-use-for-plsr-model" class="section level1">
+<h1>Creating data object to use for plsr model</h1>
+<pre class="r"><code>#create a df with bp and all features to use for plsr model
+results.plsr &lt;- cbind(results$bp, allDescs)
+colnames(results.plsr)[1] &lt;- &#39;bp&#39;
+
+#removing NAs and NANs
+results.plsr &lt;- results.plsr[ , -which(names(results.plsr) %in% c(&quot;VABC&quot;,&quot;geomShape&quot;))]</code></pre>
+</div>
+<div id="splitting-data-into-a-test-and-training-set" class="section level1">
+<h1>Splitting data into a test and training set</h1>
+<pre class="r"><code>## 80% of the dataset size
+smp_size &lt;- floor(.80 * nrow(results.plsr))
+
+## set the seed to get the same test and training sets when rerunning the code
+set.seed(123)
+train_ind &lt;- sample(seq_len(nrow(results.plsr)), size = smp_size)
+
+train &lt;- results.plsr[train_ind, ]
+test &lt;- results.plsr[-train_ind, ]</code></pre>
+</div>
+<div id="making-plsr-model-based-on-the-training-data-set" class="section level1">
+<h1>Making plsr model based on the training data set</h1>
+<pre class="r"><code>bp.plsr &lt;- plsr(bp ~. , data=train, validation = &quot;LOO&quot;, ncomp=4)</code></pre>
+</div>
+<div id="testing-the-models-accuracy-on-the-test-data-set" class="section level1">
+<h1>Testing the models accuracy on the test data set</h1>
+<pre class="r"><code>#select column containing bp
+bp_index &lt;- which(colnames(test) == &quot;bp&quot;)
+Prediction &lt;- RMSEP(bp.plsr, newdata=test)
+#compare predicted bp&#39;s to actual bp&#39;s and look at the RMSEP
+Prediction</code></pre>
+<pre><code>## (Intercept)      1 comps      2 comps      3 comps      4 comps  
+##      256.64       152.23        74.74        71.22        66.33</code></pre>
+<pre class="r"><code>#RMSEP is 46.8 at time of running</code></pre>
+</div>
+<div id="plotting-predicted-boiling-ponts-against-actual-boiling-points" class="section level1">
+<h1>Plotting predicted boiling ponts against actual boiling points</h1>
+<pre class="r"><code>#plot the predicted values against the measured values for the corss-validated values
+predplot(bp.plsr, main = &quot;Predicted bp vs measured Bp of Cross-Validation&quot;)
+abline(a = 0, b = 1)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>#it seems that the model predicts most of the boiling points pretty well except for the lower boiling points
+
+#plotting the boiling points of the test set vs the predicted boiling points calculated by the pls model
+predplot(bp.plsr, newdata=test, main = &quot;Predicted bp vs measured bp of Test data&quot;)
+abline(a = 0, b = 1)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
