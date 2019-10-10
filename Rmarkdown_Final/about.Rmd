@@ -1,0 +1,6 @@
+---
+title: "About This Website"
+---
+
+This GitHub page shows the Rscript that was made for assignment 2 of Scientific Programming (MSB1015). 
+See the [GitHub repository](https://github.com/RobinHaerkens/MSB1015_Assignment2) for more details.
