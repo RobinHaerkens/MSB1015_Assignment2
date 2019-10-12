@@ -121,7 +121,7 @@ results.plsr <- cbind(results$bp, allDescs)
 colnames(results.plsr)[1] <- 'bp'
 
 #removing NAs and NANs
-results.plsr <- results.plsr[ , -which(names(results.plsr) %in% c("VABC","geomShape"))]
+results.plsr <- results.plsr[ , -which(names(results.plsr) %in% c("VABC","geomShape","Kier3","Toposhape"))]
 ```
 
 #Splitting data into a test and training set
@@ -131,7 +131,7 @@ results.plsr <- results.plsr[ , -which(names(results.plsr) %in% c("VABC","geomSh
 smp_size <- floor(.80 * nrow(results.plsr))
 
 ## set the seed to get the same test and training sets when rerunning the code
-set.seed(123)
+set.seed(2)
 train_ind <- sample(seq_len(nrow(results.plsr)), size = smp_size)
 
 train <- results.plsr[train_ind, ]
