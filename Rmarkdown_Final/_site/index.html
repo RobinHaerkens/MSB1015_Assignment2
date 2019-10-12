@@ -295,7 +295,7 @@ $(document).ready(function () {
 
 
 <div id="loading-in-all-the-required-packages" class="section level1">
-<h1>Loading in all the required packages</h1>
+<h1>loading in all the required packages</h1>
 <pre class="r"><code>#Install packages if needed and load, or just load packages
 #Required packages are WikidataQueryServiceR to obtain the data from wikidata
 #rJAVA and rcdk are required to predict the pb based on the SMILES
@@ -322,10 +322,10 @@ for (i in requiredpackages) {
   library(pls)</code></pre>
 </div>
 <div id="loading-in-the-data-using-sparql" class="section level1">
-<h1>Loading in the data using SPARQL</h1>
+<h1>loading in the data using SPARQL</h1>
 </div>
 <div id="requesting-boiling-point-of-all-alkanes-with-units-and-smiles-data" class="section level1">
-<h1>Requesting boiling point of all alkanes with units and SMILES data</h1>
+<h1>requesting boiling point of all alkanes with units and SMILES data</h1>
 <pre class="r"><code>sparql_query &lt;- &#39;SELECT DISTINCT ?comp ?compLabel ?bp ?bpUnitLabel ?SMILE WHERE {
     ?comp wdt:P31/wdt:P279* wd:Q41581 ;
   p:P2102 [
@@ -339,7 +339,7 @@ results = query_wikidata(sparql_query)</code></pre>
 <pre><code>## 134 rows were returned by WDQS</code></pre>
 </div>
 <div id="data-preprocessing-and-control-remove-brackets-from-smiles-string-for-data-control" class="section level1">
-<h1>Data preprocessing and control, remove brackets from SMILES string for data control</h1>
+<h1>data preprocessing and control, remove brackets from SMILES string for data control</h1>
 <pre class="r"><code>#get index of colnumbers to make SMILES and bp selection
 index_SMILES &lt;- which(colnames(results)==&quot;SMILE&quot;)
 index_bp &lt;- which(colnames(results) ==&quot;bp&quot;)
@@ -358,10 +358,12 @@ results[,5] &lt;- gsub(pattern, replacement, results[,index_SMILES])
 #plot the amount of C&#39;s against bp to see releation and look for outlayers
 plot(results[order(nchar(results[,index_SMILES])),index_bp], xlab=&quot;alkane length&quot;, ylab=&quot;bp&quot;)</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<pre class="r"><code>#it looks from the plot that the units are not all equal</code></pre>
+</div>
+<div id="it-looks-from-the-plot-that-the-units-are-not-all-equal" class="section level1">
+<h1>it looks from the plot that the units are not all equal</h1>
 </div>
 <div id="changing-all-of-the-units-kelvintc273.15-tf-459.67-x-59" class="section level1">
-<h1>Changing all of the units kelvin(T(C)+273.15, T(F) + 459.67) x 5/9)</h1>
+<h1>changing all of the units kelvin(T(C)+273.15, T(F) + 459.67) x 5/9)</h1>
 <pre class="r"><code>#change Celsius to Kelvin
 for(i in 1:nrow(results)){
   if (results[i,index_bpUnit] == &quot;degree Celsius&quot;){
@@ -378,13 +380,13 @@ for(i in 1:nrow(results)){
 }</code></pre>
 </div>
 <div id="data-control-after-changing-temperatures-to-celsius" class="section level1">
-<h1>Data control after changing temperatures to celsius</h1>
+<h1>data control after changing temperatures to celsius</h1>
 <pre class="r"><code>#plot again with all units converted to kelvin
 plot(results[order(nchar(results[,index_SMILES])),index_bp], xlab=&quot;alkane length&quot;, ylab=&quot;bp&quot;)</code></pre>
 <p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="get-all-the-molecular-information-from-the-rcdk-package-for-the-alkanes-based-on-smiles" class="section level1">
-<h1>Get all the molecular information from the rcdk package for the alkanes based on SMILES</h1>
+<h1>get all the molecular information from the rcdk package for the alkanes based on SMILES</h1>
 <pre class="r"><code>#reassign the orignal SMILES to the results
 results[,index_SMILES] &lt;- results_SMILES
 
@@ -400,13 +402,13 @@ dn &lt;- get.desc.names(dc[3])
 allDescs &lt;- eval.desc(results.rcdk, dn)</code></pre>
 </div>
 <div id="creating-data-object-to-use-for-plsr-model" class="section level1">
-<h1>Creating data object to use for plsr model</h1>
+<h1>creating data object to use for plsr model</h1>
 <pre class="r"><code>#create a df with bp and all features to use for plsr model
 results.plsr &lt;- cbind(results$bp, allDescs)
 colnames(results.plsr)[1] &lt;- &#39;bp&#39;
 
 #removing NAs and NANs
-results.plsr &lt;- results.plsr[ , -which(names(results.plsr) %in% c(&quot;VABC&quot;,&quot;geomShape&quot;))]</code></pre>
+results.plsr &lt;- results.plsr[ , -which(names(results.plsr) %in% c(&quot;VABC&quot;,&quot;geomShape&quot;,&quot;Kier3&quot;,&quot;Toposhape&quot;))]</code></pre>
 </div>
 <div id="splitting-data-into-a-test-and-training-set" class="section level1">
 <h1>Splitting data into a test and training set</h1>
@@ -414,7 +416,7 @@ results.plsr &lt;- results.plsr[ , -which(names(results.plsr) %in% c(&quot;VABC&
 smp_size &lt;- floor(.80 * nrow(results.plsr))
 
 ## set the seed to get the same test and training sets when rerunning the code
-set.seed(123)
+set.seed(2)
 train_ind &lt;- sample(seq_len(nrow(results.plsr)), size = smp_size)
 
 train &lt;- results.plsr[train_ind, ]
@@ -425,18 +427,18 @@ test &lt;- results.plsr[-train_ind, ]</code></pre>
 <pre class="r"><code>bp.plsr &lt;- plsr(bp ~. , data=train, validation = &quot;LOO&quot;, ncomp=4)</code></pre>
 </div>
 <div id="testing-the-models-accuracy-on-the-test-data-set" class="section level1">
-<h1>Testing the models accuracy on the test data set</h1>
+<h1>testing the models accuracy on the test data set</h1>
 <pre class="r"><code>#select column containing bp
 bp_index &lt;- which(colnames(test) == &quot;bp&quot;)
 Prediction &lt;- RMSEP(bp.plsr, newdata=test)
 #compare predicted bp&#39;s to actual bp&#39;s and look at the RMSEP
 Prediction</code></pre>
 <pre><code>## (Intercept)      1 comps      2 comps      3 comps      4 comps  
-##      256.64       152.23        74.74        71.22        66.33</code></pre>
+##      263.99       178.99        81.19        28.08        26.21</code></pre>
 <pre class="r"><code>#RMSEP is 46.8 at time of running</code></pre>
 </div>
 <div id="plotting-predicted-boiling-ponts-against-actual-boiling-points" class="section level1">
-<h1>Plotting predicted boiling ponts against actual boiling points</h1>
+<h1>plotting predicted boiling ponts against actual boiling points</h1>
 <pre class="r"><code>#plot the predicted values against the measured values for the corss-validated values
 predplot(bp.plsr, main = &quot;Predicted bp vs measured Bp of Cross-Validation&quot;)
 abline(a = 0, b = 1)</code></pre>

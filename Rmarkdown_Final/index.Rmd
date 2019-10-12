@@ -2,7 +2,7 @@
 title: "MSB1015_Assignment_2"
 output: html_document
 ---
-#Loading in all the required packages
+#loading in all the required packages
 
 
 ```{r setup, include=TRUE}
@@ -29,8 +29,8 @@ for (i in requiredpackages) {
   library(pls)
 ```
 
-#Loading in the data using SPARQL
-#Requesting boiling point of all alkanes with units and SMILES data
+#loading in the data using SPARQL
+#requesting boiling point of all alkanes with units and SMILES data
 
 ```{r}
 sparql_query <- 'SELECT DISTINCT ?comp ?compLabel ?bp ?bpUnitLabel ?SMILE WHERE {
@@ -45,7 +45,7 @@ sparql_query <- 'SELECT DISTINCT ?comp ?compLabel ?bp ?bpUnitLabel ?SMILE WHERE 
 results = query_wikidata(sparql_query)
 ```
 
-#Data preprocessing and control, remove brackets from SMILES string for data control
+#data preprocessing and control, remove brackets from SMILES string for data control
 
 ```{r}
 #get index of colnumbers to make SMILES and bp selection
@@ -65,11 +65,10 @@ results[,5] <- gsub(pattern, replacement, results[,index_SMILES])
 
 #plot the amount of C's against bp to see releation and look for outlayers
 plot(results[order(nchar(results[,index_SMILES])),index_bp], xlab="alkane length", ylab="bp")
-#it looks from the plot that the units are not all equal
 ```
 
-
-#Changing all of the units kelvin(T(C)+273.15, T(F) + 459.67) x 5/9)
+#it looks from the plot that the units are not all equal
+#changing all of the units kelvin(T(C)+273.15, T(F) + 459.67) x 5/9)
 
 ```{r}
 #change Celsius to Kelvin
@@ -88,7 +87,7 @@ for(i in 1:nrow(results)){
 }
 ```
 
-#Data  control after changing temperatures to celsius
+#data  control after changing temperatures to celsius
 
 ```{r}
 #plot again with all units converted to kelvin
@@ -96,7 +95,7 @@ plot(results[order(nchar(results[,index_SMILES])),index_bp], xlab="alkane length
 
 ```
 
-#Get all the molecular information from the rcdk package for the alkanes based on SMILES
+#get all the molecular information from the rcdk package for the alkanes based on SMILES
 
 ```{r}
 #reassign the orignal SMILES to the results
@@ -114,7 +113,7 @@ dn <- get.desc.names(dc[3])
 allDescs <- eval.desc(results.rcdk, dn)
 ```
 
-#Creating data object to use for plsr model
+#creating data object to use for plsr model
 
 ```{r}
 #create a df with bp and all features to use for plsr model
@@ -122,7 +121,7 @@ results.plsr <- cbind(results$bp, allDescs)
 colnames(results.plsr)[1] <- 'bp'
 
 #removing NAs and NANs
-results.plsr <- results.plsr[ , -which(names(results.plsr) %in% c("VABC","geomShape"))]
+results.plsr <- results.plsr[ , -which(names(results.plsr) %in% c("VABC","geomShape","Kier3","Toposhape"))]
 ```
 
 #Splitting data into a test and training set
@@ -132,7 +131,7 @@ results.plsr <- results.plsr[ , -which(names(results.plsr) %in% c("VABC","geomSh
 smp_size <- floor(.80 * nrow(results.plsr))
 
 ## set the seed to get the same test and training sets when rerunning the code
-set.seed(123)
+set.seed(2)
 train_ind <- sample(seq_len(nrow(results.plsr)), size = smp_size)
 
 train <- results.plsr[train_ind, ]
@@ -147,7 +146,7 @@ bp.plsr <- plsr(bp ~. , data=train, validation = "LOO", ncomp=4)
 
 ```
 
-#Testing the models accuracy on the test data set
+#testing the models accuracy on the test data set
 
 ```{r}
 #select column containing bp
@@ -158,7 +157,7 @@ Prediction
 #RMSEP is 46.8 at time of running
 ```
 
-#Plotting predicted boiling ponts against actual boiling points
+#plotting predicted boiling ponts against actual boiling points
 
 ```{r}
 #plot the predicted values against the measured values for the corss-validated values
